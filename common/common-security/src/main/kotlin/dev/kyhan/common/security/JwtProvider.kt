@@ -11,32 +11,37 @@ class JwtProvider(
 ) {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(properties.secret.toByteArray())
 
-    fun generateAccessToken(userId: UUID, email: String): String {
+    fun generateAccessToken(userId: UUID, email: String?): String {
         return generateToken(userId.toString(), email, properties.accessTokenExpiration, TokenType.ACCESS)
     }
 
-    fun generateRefreshToken(userId: UUID, email: String): String {
+    fun generateRefreshToken(userId: UUID, email: String?): String {
         return generateToken(userId.toString(), email, properties.refreshTokenExpiration, TokenType.REFRESH)
     }
 
     private fun generateToken(
         userId: String,
-        email: String,
+        email: String?,
         expiration: Long,
         tokenType: TokenType
     ): String {
         val now = Date()
         val expiryDate = Date(now.time + expiration)
 
-        return Jwts.builder()
+        val builder = Jwts.builder()
             .subject(userId)
-            .claim("email", email)
             .claim("type", tokenType.name)
             .issuer(properties.issuer)
             .issuedAt(now)
             .expiration(expiryDate)
             .signWith(secretKey)
-            .compact()
+
+        // email이 null이 아닐 때만 claim에 추가
+        if (email != null) {
+            builder.claim("email", email)
+        }
+
+        return builder.compact()
     }
 
     fun validateToken(token: String): Boolean {
@@ -52,8 +57,8 @@ class JwtProvider(
         return UUID.fromString(parseToken(token).payload.subject)
     }
 
-    fun getEmailFromToken(token: String): String {
-        return parseToken(token).payload["email"] as String
+    fun getEmailFromToken(token: String): String? {
+        return parseToken(token).payload["email"] as? String
     }
 
     fun getTokenType(token: String): TokenType {

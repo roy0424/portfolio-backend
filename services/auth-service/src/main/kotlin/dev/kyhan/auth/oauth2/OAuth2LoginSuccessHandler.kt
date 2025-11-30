@@ -48,61 +48,48 @@ class OAuth2LoginSuccessHandler(
             ?: oauth2User.getAttribute<Any>("id")?.toString()
             ?: return Mono.error(IllegalStateException("Cannot extract user ID from OAuth2 provider"))
 
-        val emailMono = when (provider) {
-            AuthProvider.GITHUB -> {
-                // GitHub의 경우 이메일이 없으면 login(username)을 기반으로 생성
-                val email = oauth2User.getAttribute<String>("email")
-                if (email.isNullOrBlank()) {
-                    val login = oauth2User.getAttribute<String>("login")
-                        ?: return Mono.error(IllegalStateException("Cannot extract GitHub username"))
-                    Mono.just("${login}@users.noreply.github.com")
-                } else {
-                    Mono.just(email)
-                }
-            }
-            AuthProvider.GOOGLE -> {
-                val email = oauth2User.getAttribute<String>("email")
-                    ?: return Mono.error(IllegalStateException("Email not provided by Google"))
-                Mono.just(email)
-            }
+        // OAuth2 제공자로부터 이메일 추출 (없으면 null)
+        val email = oauth2User.getAttribute<String>("email")
+        val emailVerified = when (provider) {
+            AuthProvider.GOOGLE -> email != null  // Google은 이메일 제공 시 verified
+            AuthProvider.GITHUB -> email != null  // GitHub도 이메일 제공 시 verified
         }
 
         val name = oauth2User.getAttribute<String>("name")
         val picture = oauth2User.getAttribute<String>("picture")
             ?: oauth2User.getAttribute<String>("avatar_url")
 
-        return emailMono.flatMap { email ->
-            processOAuth2User(provider, providerId, email, name, picture)
-                .flatMap { userId ->
-                    val accessToken = jwtProvider.generateAccessToken(userId, email)
-                    val refreshToken = jwtProvider.generateRefreshToken(userId, email)
+        return processOAuth2User(provider, providerId, email, emailVerified, name, picture)
+            .flatMap { userId ->
+                val accessToken = jwtProvider.generateAccessToken(userId, email)
+                val refreshToken = jwtProvider.generateRefreshToken(userId, email)
 
-                    // 프론트엔드로 리다이렉트 (토큰을 쿼리 파라미터로 전달)
-                    val redirectUrl = UriComponentsBuilder
-                        .fromUriString("http://localhost:3000/auth/callback")
-                        .queryParam("accessToken", accessToken)
-                        .queryParam("refreshToken", refreshToken)
-                        .build()
-                        .toUriString()
+                // 프론트엔드로 리다이렉트 (토큰을 쿼리 파라미터로 전달)
+                val redirectUrl = UriComponentsBuilder
+                    .fromUriString("http://localhost:3000/auth/callback")
+                    .queryParam("accessToken", accessToken)
+                    .queryParam("refreshToken", refreshToken)
+                    .build()
+                    .toUriString()
 
-                    val response = webFilterExchange.exchange.response
-                    response.statusCode = org.springframework.http.HttpStatus.FOUND
-                    response.headers.location = URI.create(redirectUrl)
-                    response.setComplete()
-                }
-        }
+                val response = webFilterExchange.exchange.response
+                response.statusCode = org.springframework.http.HttpStatus.FOUND
+                response.headers.location = URI.create(redirectUrl)
+                response.setComplete()
+            }
     }
 
     private fun processOAuth2User(
         provider: AuthProvider,
         providerId: String,
-        email: String,
+        email: String?,
+        emailVerified: Boolean,
         name: String?,
         picture: String?
     ): Mono<UUID> {
         return userAccountRepository.findByProviderAndProviderId(provider, providerId)
             .switchIfEmpty(
-                createNewUser(provider, providerId, email, name, picture)
+                createNewUser(provider, providerId, email, emailVerified, name, picture)
             )
             .map { it.id!! }
     }
@@ -110,7 +97,8 @@ class OAuth2LoginSuccessHandler(
     private fun createNewUser(
         provider: AuthProvider,
         providerId: String,
-        email: String,
+        email: String?,
+        emailVerified: Boolean,
         name: String?,
         picture: String?
     ): Mono<UserAccount> {
@@ -118,7 +106,7 @@ class OAuth2LoginSuccessHandler(
             email = email,
             provider = provider,
             providerId = providerId,
-            emailVerified = true
+            emailVerified = emailVerified
         )
 
         return userAccountRepository.save(userAccount)

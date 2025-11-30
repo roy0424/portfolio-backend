@@ -9,7 +9,7 @@ import java.util.UUID
 data class UserAccount(
     @Id
     val id: UUID? = null,
-    val email: String,
+    val email: String?,
     val provider: AuthProvider,
     val providerId: String,
     val emailVerified: Boolean = false,

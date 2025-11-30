@@ -4,7 +4,7 @@ CREATE SCHEMA IF NOT EXISTS auth;
 -- User Account Table (OAuth2)
 CREATE TABLE auth.user_account (
     id UUID PRIMARY KEY DEFAULT uuidv7(),
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
     provider VARCHAR(20) NOT NULL,
     provider_id VARCHAR(255) NOT NULL,
     email_verified BOOLEAN DEFAULT FALSE,

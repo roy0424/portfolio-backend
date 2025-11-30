@@ -4,7 +4,8 @@ import jakarta.validation.constraints.NotBlank
 
 data class AuthResponse(
     val userId: String,
-    val email: String,
+    val email: String?,
+    val emailVerified: Boolean,
     val accessToken: String,
     val refreshToken: String,
     val profile: UserProfileDto?

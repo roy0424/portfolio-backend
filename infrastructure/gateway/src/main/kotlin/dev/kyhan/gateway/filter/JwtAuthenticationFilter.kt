@@ -39,10 +39,15 @@ class JwtAuthenticationFilter(
             val userId = jwtProvider.getUserIdFromToken(token)
             val email = jwtProvider.getEmailFromToken(token)
 
-            val mutatedRequest = request.mutate()
+            val requestBuilder = request.mutate()
                 .header("X-User-Id", userId.toString())
-                .header("X-User-Email", email)
-                .build()
+
+            // email이 있을 때만 헤더에 추가
+            if (email != null) {
+                requestBuilder.header("X-User-Email", email)
+            }
+
+            val mutatedRequest = requestBuilder.build()
 
             val mutatedExchange = exchange.mutate().request(mutatedRequest).build()
 
