@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS auth;
 
 -- User Account Table (OAuth2)
 CREATE TABLE auth.user_account (
-    id VARCHAR(36) PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuidv7(),
     email VARCHAR(255) NOT NULL,
     provider VARCHAR(20) NOT NULL,
     provider_id VARCHAR(255) NOT NULL,
@@ -20,8 +20,8 @@ CREATE INDEX idx_user_account_status ON auth.user_account(status);
 
 -- User Profile Table
 CREATE TABLE auth.user_profile (
-    id VARCHAR(36) PRIMARY KEY,
-    user_id VARCHAR(36) NOT NULL UNIQUE,
+    id UUID PRIMARY KEY DEFAULT uuidv7(),
+    user_id UUID NOT NULL UNIQUE,
     display_name VARCHAR(100),
     avatar_url VARCHAR(500),
     bio TEXT,

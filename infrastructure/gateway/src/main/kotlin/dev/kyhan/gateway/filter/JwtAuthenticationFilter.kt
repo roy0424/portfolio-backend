@@ -40,7 +40,7 @@ class JwtAuthenticationFilter(
             val email = jwtProvider.getEmailFromToken(token)
 
             val mutatedRequest = request.mutate()
-                .header("X-User-Id", userId)
+                .header("X-User-Id", userId.toString())
                 .header("X-User-Email", email)
                 .build()
 

@@ -11,12 +11,12 @@ class JwtProvider(
 ) {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(properties.secret.toByteArray())
 
-    fun generateAccessToken(userId: String, email: String): String {
-        return generateToken(userId, email, properties.accessTokenExpiration, TokenType.ACCESS)
+    fun generateAccessToken(userId: UUID, email: String): String {
+        return generateToken(userId.toString(), email, properties.accessTokenExpiration, TokenType.ACCESS)
     }
 
-    fun generateRefreshToken(userId: String, email: String): String {
-        return generateToken(userId, email, properties.refreshTokenExpiration, TokenType.REFRESH)
+    fun generateRefreshToken(userId: UUID, email: String): String {
+        return generateToken(userId.toString(), email, properties.refreshTokenExpiration, TokenType.REFRESH)
     }
 
     private fun generateToken(
@@ -48,8 +48,8 @@ class JwtProvider(
         }
     }
 
-    fun getUserIdFromToken(token: String): String {
-        return parseToken(token).payload.subject
+    fun getUserIdFromToken(token: String): UUID {
+        return UUID.fromString(parseToken(token).payload.subject)
     }
 
     fun getEmailFromToken(token: String): String {

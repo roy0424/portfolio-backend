@@ -32,10 +32,10 @@ class TokenService(
                     userProfileRepository.findByUserId(userAccount.id!!)
                         .map { profile ->
                             AuthResponse(
-                                userId = userAccount.id!!,
+                                userId = userAccount.id.toString(),
                                 email = userAccount.email,
-                                accessToken = jwtProvider.generateAccessToken(userAccount.id!!, userAccount.email),
-                                refreshToken = jwtProvider.generateRefreshToken(userAccount.id!!, userAccount.email),
+                                accessToken = jwtProvider.generateAccessToken(userAccount.id, userAccount.email),
+                                refreshToken = jwtProvider.generateRefreshToken(userAccount.id, userAccount.email),
                                 profile = UserProfileDto(
                                     displayName = profile.displayName,
                                     avatarUrl = profile.avatarUrl,
@@ -48,10 +48,10 @@ class TokenService(
                         .switchIfEmpty(
                             Mono.just(
                                 AuthResponse(
-                                    userId = userAccount.id!!,
+                                    userId = userAccount.id.toString(),
                                     email = userAccount.email,
-                                    accessToken = jwtProvider.generateAccessToken(userAccount.id!!, userAccount.email),
-                                    refreshToken = jwtProvider.generateRefreshToken(userAccount.id!!, userAccount.email),
+                                    accessToken = jwtProvider.generateAccessToken(userAccount.id, userAccount.email),
+                                    refreshToken = jwtProvider.generateRefreshToken(userAccount.id, userAccount.email),
                                     profile = null
                                 )
                             )
