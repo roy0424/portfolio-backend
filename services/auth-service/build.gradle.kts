@@ -28,6 +28,13 @@ dependencies {
     // Kafka
     implementation("org.springframework.kafka:spring-kafka")
 
+    // Redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+    implementation("io.lettuce:lettuce-core")
+
+    // Email sending
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
 }

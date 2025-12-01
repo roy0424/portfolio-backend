@@ -16,8 +16,17 @@ enum class ErrorCode(
     // Auth (2xxx)
     INVALID_CREDENTIALS("2000", "Invalid email or password", 401),
     EMAIL_ALREADY_EXISTS("2001", "Email already exists", 409),
-    INVALID_TOKEN("2002", "Invalid or expired token", 401),
-    TOKEN_EXPIRED("2003", "Token expired", 401),
+    INVALID_TOKEN("2002", "Invalid or expired code", 401),
+    TOKEN_EXPIRED("2003", "Code expired", 401),
+    EMAIL_ALREADY_VERIFIED("2004", "Email is already verified", 400),
+    INVALID_VERIFICATION_CODE("2005", "Invalid or expired verification code", 400),
+    EMAIL_NOT_PROVIDED("2006", "Email address is required", 400),
+    INVALID_EMAIL_FORMAT("2007", "Invalid email format", 400),
+    EMAIL_UPDATE_NOT_ALLOWED("2008", "Email cannot be changed once set", 400),
+    EMAIL_VERIFICATION_REQUIRED("2009", "Email verification required", 403),
+    EMAIL_SEND_FAILED("2010", "Failed to send verification email", 500),
+    TOO_MANY_REQUESTS("2011", "Too many verification requests. Please try again later", 429),
+    VERIFICATION_COOLDOWN("2012", "Please wait before requesting a new verification code", 429),
 
     // Site (3xxx)
     SITE_NOT_FOUND("3000", "Site not found", 404),

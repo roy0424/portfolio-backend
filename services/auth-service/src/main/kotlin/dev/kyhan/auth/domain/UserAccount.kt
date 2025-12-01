@@ -12,7 +12,6 @@ data class UserAccount(
     val email: String?,
     val provider: AuthProvider,
     val providerId: String,
-    val emailVerified: Boolean = false,
     val status: UserStatus = UserStatus.ACTIVE,
     val createdAt: Instant = Instant.now(),
     var updatedAt: Instant = Instant.now()

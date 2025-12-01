@@ -50,16 +50,12 @@ class OAuth2LoginSuccessHandler(
 
         // OAuth2 제공자로부터 이메일 추출 (없으면 null)
         val email = oauth2User.getAttribute<String>("email")
-        val emailVerified = when (provider) {
-            AuthProvider.GOOGLE -> email != null  // Google은 이메일 제공 시 verified
-            AuthProvider.GITHUB -> email != null  // GitHub도 이메일 제공 시 verified
-        }
 
         val name = oauth2User.getAttribute<String>("name")
         val picture = oauth2User.getAttribute<String>("picture")
             ?: oauth2User.getAttribute<String>("avatar_url")
 
-        return processOAuth2User(provider, providerId, email, emailVerified, name, picture)
+        return processOAuth2User(provider, providerId, email, name, picture)
             .flatMap { userId ->
                 val accessToken = jwtProvider.generateAccessToken(userId, email)
                 val refreshToken = jwtProvider.generateRefreshToken(userId, email)
@@ -83,13 +79,12 @@ class OAuth2LoginSuccessHandler(
         provider: AuthProvider,
         providerId: String,
         email: String?,
-        emailVerified: Boolean,
         name: String?,
         picture: String?
     ): Mono<UUID> {
         return userAccountRepository.findByProviderAndProviderId(provider, providerId)
             .switchIfEmpty(
-                createNewUser(provider, providerId, email, emailVerified, name, picture)
+                createNewUser(provider, providerId, email, name, picture)
             )
             .map { it.id!! }
     }
@@ -98,15 +93,13 @@ class OAuth2LoginSuccessHandler(
         provider: AuthProvider,
         providerId: String,
         email: String?,
-        emailVerified: Boolean,
         name: String?,
         picture: String?
     ): Mono<UserAccount> {
         val userAccount = UserAccount(
             email = email,
             provider = provider,
-            providerId = providerId,
-            emailVerified = emailVerified
+            providerId = providerId
         )
 
         return userAccountRepository.save(userAccount)

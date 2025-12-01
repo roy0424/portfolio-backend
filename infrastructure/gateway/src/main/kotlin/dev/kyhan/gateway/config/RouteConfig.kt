@@ -18,9 +18,15 @@ class RouteConfig(
                 r.path("/oauth2/**", "/login/**")
                     .uri("http://localhost:8081")
             }
-            // Auth Service - 인증 불필요
-            .route("auth-service") { r ->
-                r.path("/auth/**")
+            // Auth Service - Public (인증 불필요)
+            .route("auth-public") { r ->
+                r.path("/auth/refresh")
+                    .uri("http://localhost:8081")
+            }
+            // Auth Service - Protected (JWT 필요)
+            .route("auth-protected") { r ->
+                r.path("/auth/email/**")
+                    .filters { f -> f.filter(jwtAuthenticationFilter) }
                     .uri("http://localhost:8081")
             }
             // Portfolio Service - JWT 필요

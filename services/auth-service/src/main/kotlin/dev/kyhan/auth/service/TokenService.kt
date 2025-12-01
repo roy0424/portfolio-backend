@@ -34,7 +34,6 @@ class TokenService(
                             AuthResponse(
                                 userId = userAccount.id.toString(),
                                 email = userAccount.email,
-                                emailVerified = userAccount.emailVerified,
                                 accessToken = jwtProvider.generateAccessToken(userAccount.id, userAccount.email),
                                 refreshToken = jwtProvider.generateRefreshToken(userAccount.id, userAccount.email),
                                 profile = UserProfileDto(
@@ -51,7 +50,6 @@ class TokenService(
                                 AuthResponse(
                                     userId = userAccount.id.toString(),
                                     email = userAccount.email,
-                                    emailVerified = userAccount.emailVerified,
                                     accessToken = jwtProvider.generateAccessToken(userAccount.id, userAccount.email),
                                     refreshToken = jwtProvider.generateRefreshToken(userAccount.id, userAccount.email),
                                     profile = null
