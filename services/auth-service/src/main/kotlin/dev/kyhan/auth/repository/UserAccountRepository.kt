@@ -8,7 +8,16 @@ import java.util.UUID
 
 interface UserAccountRepository : ReactiveCrudRepository<UserAccount, UUID> {
     fun findByEmail(email: String): Mono<UserAccount>
-    fun findByProviderAndProviderId(provider: AuthProvider, providerId: String): Mono<UserAccount>
-    fun existsByProviderAndProviderId(provider: AuthProvider, providerId: String): Mono<Boolean>
+
+    fun findByProviderAndProviderId(
+        provider: AuthProvider,
+        providerId: String,
+    ): Mono<UserAccount>
+
+    fun existsByProviderAndProviderId(
+        provider: AuthProvider,
+        providerId: String,
+    ): Mono<Boolean>
+
     fun existsByEmail(email: String): Mono<Boolean>
 }

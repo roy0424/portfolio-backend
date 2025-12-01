@@ -6,5 +6,5 @@ data class EmailVerificationCode(
     val code: String,
     val userId: UUID,
     val email: String,
-    val ttl: Long = 300 // 5 minutes in seconds
+    val ttl: Long = 300,
 )

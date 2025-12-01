@@ -7,5 +7,5 @@ data class SitePublishedEvent(
     val siteId: String,
     val userId: String,
     val domain: String,
-    override val timestamp: Instant = Instant.now()
+    override val timestamp: Instant = Instant.now(),
 ) : BaseEvent(eventId, "SITE_PUBLISHED", timestamp)

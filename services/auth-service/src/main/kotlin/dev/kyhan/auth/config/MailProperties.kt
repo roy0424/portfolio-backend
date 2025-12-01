@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "mail")
 data class MailProperties(
     var fromAddress: String = "noreply@portfolio-platform.com",
-    var fromName: String = "Portfolio Platform"
+    var fromName: String = "Portfolio Platform",
 )

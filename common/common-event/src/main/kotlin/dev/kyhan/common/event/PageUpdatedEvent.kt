@@ -8,5 +8,5 @@ data class PageUpdatedEvent(
     val siteId: String,
     val userId: String,
     val pagePath: String,
-    override val timestamp: Instant = Instant.now()
+    override val timestamp: Instant = Instant.now(),
 ) : BaseEvent(eventId, "PAGE_UPDATED", timestamp)

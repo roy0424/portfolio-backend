@@ -16,5 +16,5 @@ data class UserProfile(
     val location: String? = null,
     val website: String? = null,
     val createdAt: Instant = Instant.now(),
-    var updatedAt: Instant = Instant.now()
+    var updatedAt: Instant = Instant.now(),
 )

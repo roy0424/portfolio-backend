@@ -9,5 +9,5 @@ data class BlogPostPublishedEvent(
     val userId: String,
     val title: String,
     val slug: String,
-    override val timestamp: Instant = Instant.now()
+    override val timestamp: Instant = Instant.now(),
 ) : BaseEvent(eventId, "BLOG_POST_PUBLISHED", timestamp)

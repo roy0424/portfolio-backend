@@ -6,7 +6,7 @@ data class EmailVerificationRateLimit(
     val userId: String,
     val requestCount: Int = 1,
     val lastRequestTime: Instant = Instant.now(),
-    val ttl: Long = 3600 // 1 hour in seconds
+    val ttl: Long = 3600,
 ) {
     companion object {
         const val MAX_REQUESTS_PER_HOUR = 5
@@ -26,10 +26,9 @@ data class EmailVerificationRateLimit(
         return requestCount < MAX_REQUESTS_PER_HOUR
     }
 
-    fun incrementCount(): EmailVerificationRateLimit {
-        return copy(
+    fun incrementCount(): EmailVerificationRateLimit =
+        copy(
             requestCount = requestCount + 1,
-            lastRequestTime = Instant.now()
+            lastRequestTime = Instant.now(),
         )
-    }
 }

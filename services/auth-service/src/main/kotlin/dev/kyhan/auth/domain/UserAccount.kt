@@ -14,13 +14,16 @@ data class UserAccount(
     val providerId: String,
     val status: UserStatus = UserStatus.ACTIVE,
     val createdAt: Instant = Instant.now(),
-    var updatedAt: Instant = Instant.now()
+    var updatedAt: Instant = Instant.now(),
 )
 
 enum class UserStatus {
-    ACTIVE, INACTIVE, SUSPENDED
+    ACTIVE,
+    INACTIVE,
+    SUSPENDED,
 }
 
 enum class AuthProvider {
-    GOOGLE, GITHUB
+    GOOGLE,
+    GITHUB,
 }

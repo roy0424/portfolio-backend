@@ -9,5 +9,5 @@ data class PageViewedEvent(
     val ipAddress: String,
     val userAgent: String,
     val referer: String?,
-    override val timestamp: Instant = Instant.now()
+    override val timestamp: Instant = Instant.now(),
 ) : BaseEvent(eventId, "PAGE_VIEWED", timestamp)

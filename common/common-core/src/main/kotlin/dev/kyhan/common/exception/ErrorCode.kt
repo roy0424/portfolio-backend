@@ -3,7 +3,7 @@ package dev.kyhan.common.exception
 enum class ErrorCode(
     val code: String,
     val message: String,
-    val status: Int
+    val status: Int,
 ) {
     // Common (1xxx)
     INTERNAL_SERVER_ERROR("1000", "Internal server error", 500),

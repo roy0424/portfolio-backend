@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 class TokenService(
     private val userAccountRepository: UserAccountRepository,
     private val userProfileRepository: UserProfileRepository,
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
 ) {
     fun refreshToken(refreshToken: String): Mono<AuthResponse> {
         return try {
@@ -26,35 +26,37 @@ class TokenService(
                 return Mono.error(UnauthorizedException(ErrorCode.INVALID_TOKEN, "Not a refresh token"))
             }
 
-            userAccountRepository.findById(userId)
+            userAccountRepository
+                .findById(userId)
                 .switchIfEmpty(Mono.error(UnauthorizedException(ErrorCode.INVALID_TOKEN)))
                 .flatMap { userAccount ->
-                    userProfileRepository.findByUserId(userAccount.id!!)
+                    userProfileRepository
+                        .findByUserId(userAccount.id!!)
                         .map { profile ->
                             AuthResponse(
                                 userId = userAccount.id.toString(),
                                 email = userAccount.email,
                                 accessToken = jwtProvider.generateAccessToken(userAccount.id, userAccount.email),
                                 refreshToken = jwtProvider.generateRefreshToken(userAccount.id, userAccount.email),
-                                profile = UserProfileDto(
-                                    displayName = profile.displayName,
-                                    avatarUrl = profile.avatarUrl,
-                                    bio = profile.bio,
-                                    location = profile.location,
-                                    website = profile.website
-                                )
+                                profile =
+                                    UserProfileDto(
+                                        displayName = profile.displayName,
+                                        avatarUrl = profile.avatarUrl,
+                                        bio = profile.bio,
+                                        location = profile.location,
+                                        website = profile.website,
+                                    ),
                             )
-                        }
-                        .switchIfEmpty(
+                        }.switchIfEmpty(
                             Mono.just(
                                 AuthResponse(
                                     userId = userAccount.id.toString(),
                                     email = userAccount.email,
                                     accessToken = jwtProvider.generateAccessToken(userAccount.id, userAccount.email),
                                     refreshToken = jwtProvider.generateRefreshToken(userAccount.id, userAccount.email),
-                                    profile = null
-                                )
-                            )
+                                    profile = null,
+                                ),
+                            ),
                         )
                 }
         } catch (e: Exception) {

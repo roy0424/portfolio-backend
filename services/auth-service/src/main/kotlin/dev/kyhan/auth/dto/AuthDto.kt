@@ -9,7 +9,7 @@ data class AuthResponse(
     val email: String?,
     val accessToken: String,
     val refreshToken: String,
-    val profile: UserProfileDto?
+    val profile: UserProfileDto?,
 )
 
 data class UserProfileDto(
@@ -17,33 +17,33 @@ data class UserProfileDto(
     val avatarUrl: String?,
     val bio: String?,
     val location: String?,
-    val website: String?
+    val website: String?,
 )
 
 data class RefreshTokenRequest(
     @field:NotBlank(message = "Refresh token is required")
-    val refreshToken: String
+    val refreshToken: String,
 )
 
 data class RegisterEmailRequest(
     @field:NotBlank(message = "Email is required")
     @field:Email(message = "Invalid email format")
-    val email: String
+    val email: String,
 )
 
 data class VerifyEmailRequest(
     @field:NotBlank(message = "Verification code is required")
     @field:Pattern(regexp = "^\\d{6}$", message = "Verification code must be 6 digits")
-    val code: String
+    val code: String,
 )
 
 data class EmailVerificationResponse(
     val message: String,
-    val email: String?
+    val email: String?,
 )
 
 data class ResendVerificationRequest(
     @field:NotBlank(message = "Email is required")
     @field:Email(message = "Invalid email format")
-    val email: String
+    val email: String,
 )

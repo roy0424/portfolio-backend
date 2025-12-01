@@ -6,5 +6,5 @@ import com.fasterxml.jackson.annotation.JsonInclude
 data class ErrorResponse(
     val code: String,
     val message: String,
-    val details: Map<String, Any>? = null
+    val details: Map<String, Any>? = null,
 )

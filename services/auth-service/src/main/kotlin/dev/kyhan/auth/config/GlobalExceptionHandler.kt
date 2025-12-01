@@ -14,7 +14,6 @@ private val logger = KotlinLogging.logger {}
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
-
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(ex: BusinessException): ResponseEntity<ApiResponse<Nothing>> {
         logger.warn { "Business exception: ${ex.message}" }
@@ -24,17 +23,18 @@ class GlobalExceptionHandler {
                 ApiResponse.error(
                     ErrorResponse(
                         code = ex.code,
-                        message = ex.message
-                    )
-                )
+                        message = ex.message,
+                    ),
+                ),
             )
     }
 
     @ExceptionHandler(WebExchangeBindException::class)
     fun handleValidationException(ex: WebExchangeBindException): ResponseEntity<ApiResponse<Nothing>> {
-        val errors = ex.bindingResult.fieldErrors.associate {
-            it.field to (it.defaultMessage ?: "Invalid value")
-        }
+        val errors =
+            ex.bindingResult.fieldErrors.associate {
+                it.field to (it.defaultMessage ?: "Invalid value")
+            }
 
         logger.warn { "Validation error: $errors" }
 
@@ -45,9 +45,9 @@ class GlobalExceptionHandler {
                     ErrorResponse(
                         code = "1001",
                         message = "Validation failed",
-                        details = errors
-                    )
-                )
+                        details = errors,
+                    ),
+                ),
             )
     }
 
@@ -60,9 +60,9 @@ class GlobalExceptionHandler {
                 ApiResponse.error(
                     ErrorResponse(
                         code = "1000",
-                        message = "Internal server error"
-                    )
-                )
+                        message = "Internal server error",
+                    ),
+                ),
             )
     }
 }

@@ -14,10 +14,12 @@ private val logger = KotlinLogging.logger {}
 
 @Component
 class JwtAuthenticationFilter(
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
 ) : GatewayFilter {
-
-    override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Void> {
+    override fun filter(
+        exchange: ServerWebExchange,
+        chain: GatewayFilterChain,
+    ): Mono<Void> {
         val request = exchange.request
         val authHeader = request.headers.getFirst(HttpHeaders.AUTHORIZATION)
 
@@ -39,8 +41,10 @@ class JwtAuthenticationFilter(
             val userId = jwtProvider.getUserIdFromToken(token)
             val email = jwtProvider.getEmailFromToken(token)
 
-            val requestBuilder = request.mutate()
-                .header("X-User-Id", userId.toString())
+            val requestBuilder =
+                request
+                    .mutate()
+                    .header("X-User-Id", userId.toString())
 
             // email이 있을 때만 헤더에 추가
             if (email != null) {

@@ -10,16 +10,13 @@ import org.springframework.context.annotation.Configuration
 class JwtConfig {
     @Bean
     @ConfigurationProperties(prefix = "jwt")
-    fun jwtProperties(): JwtProperties {
-        return JwtProperties(
+    fun jwtProperties(): JwtProperties =
+        JwtProperties(
             secret = "your-secret-key-change-this-in-production-at-least-32-characters",
             accessTokenExpiration = 3600000,
-            refreshTokenExpiration = 2592000000
+            refreshTokenExpiration = 2592000000,
         )
-    }
 
     @Bean
-    fun jwtProvider(properties: JwtProperties): JwtProvider {
-        return JwtProvider(properties)
-    }
+    fun jwtProvider(properties: JwtProperties): JwtProvider = JwtProvider(properties)
 }

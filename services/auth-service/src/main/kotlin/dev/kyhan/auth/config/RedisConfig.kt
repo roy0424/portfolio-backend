@@ -3,8 +3,8 @@ package dev.kyhan.auth.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import dev.kyhan.auth.domain.EmailVerificationRateLimit
 import dev.kyhan.auth.domain.EmailVerificationCode
+import dev.kyhan.auth.domain.EmailVerificationRateLimit
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
@@ -15,9 +15,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
 
 @Configuration
 class RedisConfig(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) {
-
     init {
         objectMapper.registerModule(JavaTimeModule())
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -25,26 +24,28 @@ class RedisConfig(
 
     @Bean
     fun emailVerificationCodeRedisTemplate(
-        connectionFactory: ReactiveRedisConnectionFactory
+        connectionFactory: ReactiveRedisConnectionFactory,
     ): ReactiveRedisTemplate<String, EmailVerificationCode> {
         val serializer = Jackson2JsonRedisSerializer(objectMapper, EmailVerificationCode::class.java)
-        val context = RedisSerializationContext
-            .newSerializationContext<String, EmailVerificationCode>(StringRedisSerializer())
-            .value(serializer)
-            .build()
+        val context =
+            RedisSerializationContext
+                .newSerializationContext<String, EmailVerificationCode>(StringRedisSerializer())
+                .value(serializer)
+                .build()
 
         return ReactiveRedisTemplate(connectionFactory, context)
     }
 
     @Bean
     fun emailVerificationRateLimitRedisTemplate(
-        connectionFactory: ReactiveRedisConnectionFactory
+        connectionFactory: ReactiveRedisConnectionFactory,
     ): ReactiveRedisTemplate<String, EmailVerificationRateLimit> {
         val serializer = Jackson2JsonRedisSerializer(objectMapper, EmailVerificationRateLimit::class.java)
-        val context = RedisSerializationContext
-            .newSerializationContext<String, EmailVerificationRateLimit>(StringRedisSerializer())
-            .value(serializer)
-            .build()
+        val context =
+            RedisSerializationContext
+                .newSerializationContext<String, EmailVerificationRateLimit>(StringRedisSerializer())
+                .value(serializer)
+                .build()
 
         return ReactiveRedisTemplate(connectionFactory, context)
     }

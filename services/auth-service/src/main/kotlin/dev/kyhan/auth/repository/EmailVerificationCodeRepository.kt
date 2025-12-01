@@ -1,18 +1,22 @@
 package dev.kyhan.auth.repository
 
 import dev.kyhan.auth.domain.EmailVerificationCode
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
 import java.time.Duration
 import java.util.UUID
-import org.springframework.beans.factory.annotation.Qualifier
 
 interface EmailVerificationCodeRepository {
     fun save(code: EmailVerificationCode): Mono<EmailVerificationCode>
+
     fun findById(code: String): Mono<EmailVerificationCode>
+
     fun findByUserId(userId: UUID): Mono<EmailVerificationCode>
+
     fun deleteById(code: String): Mono<Boolean>
+
     fun deleteByUserId(userId: UUID): Mono<Void>
 }
 
@@ -20,9 +24,8 @@ interface EmailVerificationCodeRepository {
 class EmailVerificationCodeRepositoryImpl(
     @Qualifier("emailVerificationCodeRedisTemplate")
     private val codeRedisTemplate: ReactiveRedisTemplate<String, EmailVerificationCode>,
-    private val stringRedisTemplate: ReactiveRedisTemplate<String, String> // Spring Boot 기본 빈 사용
+    private val stringRedisTemplate: ReactiveRedisTemplate<String, String>,
 ) : EmailVerificationCodeRepository {
-
     companion object {
         private const val KEY_PREFIX = "email_verification:"
         private const val USER_INDEX_PREFIX = "email_verification_user:"
@@ -32,7 +35,8 @@ class EmailVerificationCodeRepositoryImpl(
         val codeKey = KEY_PREFIX + code.code
         val userIndexKey = USER_INDEX_PREFIX + code.userId.toString()
 
-        return codeRedisTemplate.opsForValue()
+        return codeRedisTemplate
+            .opsForValue()
             .set(codeKey, code, Duration.ofSeconds(code.ttl))
             .then(stringRedisTemplate.opsForValue().set(userIndexKey, code.code, Duration.ofSeconds(code.ttl)))
             .thenReturn(code)
@@ -45,7 +49,9 @@ class EmailVerificationCodeRepositoryImpl(
 
     override fun findByUserId(userId: UUID): Mono<EmailVerificationCode> {
         val userIndexKey = USER_INDEX_PREFIX + userId.toString()
-        return stringRedisTemplate.opsForValue().get(userIndexKey)
+        return stringRedisTemplate
+            .opsForValue()
+            .get(userIndexKey)
             .flatMap { codeString ->
                 findById(codeString)
             }
@@ -58,13 +64,15 @@ class EmailVerificationCodeRepositoryImpl(
 
     override fun deleteByUserId(userId: UUID): Mono<Void> {
         val userIndexKey = USER_INDEX_PREFIX + userId.toString()
-        return stringRedisTemplate.opsForValue().get(userIndexKey)
+        return stringRedisTemplate
+            .opsForValue()
+            .get(userIndexKey)
             .flatMap { codeString ->
                 val codeKey = KEY_PREFIX + codeString
-                codeRedisTemplate.delete(codeKey)
+                codeRedisTemplate
+                    .delete(codeKey)
                     .then(stringRedisTemplate.delete(userIndexKey))
                     .then()
-            }
-            .switchIfEmpty(Mono.empty())
+            }.switchIfEmpty(Mono.empty())
     }
 }

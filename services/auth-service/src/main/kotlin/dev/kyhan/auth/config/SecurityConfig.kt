@@ -10,21 +10,21 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 @Configuration
 @EnableWebFluxSecurity
 class SecurityConfig(
-    private val oauth2LoginSuccessHandler: OAuth2LoginSuccessHandler
+    private val oauth2LoginSuccessHandler: OAuth2LoginSuccessHandler,
 ) {
     @Bean
-    fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
-        return http
+    fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
+        http
             .csrf { it.disable() }
             .authorizeExchange { exchanges ->
                 exchanges
-                    .pathMatchers("/auth/**", "/login/**", "/oauth2/**").permitAll()
-                    .pathMatchers("/actuator/**").permitAll()
-                    .anyExchange().authenticated()
-            }
-            .oauth2Login { oauth2 ->
+                    .pathMatchers("/auth/**", "/login/**", "/oauth2/**")
+                    .permitAll()
+                    .pathMatchers("/actuator/**")
+                    .permitAll()
+                    .anyExchange()
+                    .authenticated()
+            }.oauth2Login { oauth2 ->
                 oauth2.authenticationSuccessHandler(oauth2LoginSuccessHandler)
-            }
-            .build()
-    }
+            }.build()
 }
