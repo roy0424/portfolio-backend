@@ -35,6 +35,4 @@ dependencies {
     // Email sending
     implementation("org.springframework.boot:spring-boot-starter-mail")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
 }
