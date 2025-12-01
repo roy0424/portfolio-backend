@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.4.1" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1" apply false
+    id("org.jetbrains.kotlinx.kover") version "0.9.3"
 }
 
 allprojects {
@@ -15,11 +16,20 @@ allprojects {
     }
 }
 
+dependencies {
+    kover(project(":common:common-core"))
+    kover(project(":common:common-security"))
+    kover(project(":common:common-event"))
+    kover(project(":services:auth-service"))
+    kover(project(":infrastructure:gateway"))
+}
+
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "org.jetbrains.kotlinx.kover")
 
     configure<JavaPluginExtension> {
         toolchain {

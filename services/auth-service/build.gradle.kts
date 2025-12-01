@@ -34,5 +34,4 @@ dependencies {
 
     // Email sending
     implementation("org.springframework.boot:spring-boot-starter-mail")
-
 }

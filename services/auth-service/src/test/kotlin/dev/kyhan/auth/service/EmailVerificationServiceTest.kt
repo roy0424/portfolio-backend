@@ -72,13 +72,14 @@ class EmailVerificationServiceTest {
             every { userAccountRepository.findById(testUserId) } returns Mono.just(userAccount)
             every { userAccountRepository.existsByEmail(testEmail) } returns Mono.just(false)
             every { codeRepository.findByUserId(testUserId) } returns Mono.empty()
-            every { codeRepository.save(any()) } returns Mono.just(
-                EmailVerificationCode(
-                    code = testCode,
-                    userId = testUserId,
-                    email = testEmail,
-                ),
-            )
+            every { codeRepository.save(any()) } returns
+                Mono.just(
+                    EmailVerificationCode(
+                        code = testCode,
+                        userId = testUserId,
+                        email = testEmail,
+                    ),
+                )
             every { emailService.sendVerificationEmail(testEmail, any()) } returns Mono.empty()
 
             // When & Then
@@ -361,13 +362,14 @@ class EmailVerificationServiceTest {
             every { userAccountRepository.findById(testUserId) } returns Mono.just(userAccount)
             every { userAccountRepository.existsByEmail(testEmail) } returns Mono.just(false)
             every { codeRepository.findByUserId(testUserId) } returns Mono.empty()
-            every { codeRepository.save(any()) } returns Mono.just(
-                EmailVerificationCode(
-                    code = testCode,
-                    userId = testUserId,
-                    email = testEmail,
-                ),
-            )
+            every { codeRepository.save(any()) } returns
+                Mono.just(
+                    EmailVerificationCode(
+                        code = testCode,
+                        userId = testUserId,
+                        email = testEmail,
+                    ),
+                )
             every { emailService.sendVerificationEmail(testEmail, any()) } returns Mono.empty()
 
             // When & Then
@@ -403,13 +405,14 @@ class EmailVerificationServiceTest {
             every { userAccountRepository.findById(testUserId) } returns Mono.just(userAccount)
             every { userAccountRepository.existsByEmail(testEmail) } returns Mono.just(false)
             every { codeRepository.findByUserId(testUserId) } returns Mono.empty()
-            every { codeRepository.save(any()) } returns Mono.just(
-                EmailVerificationCode(
-                    code = testCode,
-                    userId = testUserId,
-                    email = testEmail,
-                ),
-            )
+            every { codeRepository.save(any()) } returns
+                Mono.just(
+                    EmailVerificationCode(
+                        code = testCode,
+                        userId = testUserId,
+                        email = testEmail,
+                    ),
+                )
             every { emailService.sendVerificationEmail(testEmail, any()) } returns Mono.empty()
 
             // When & Then
