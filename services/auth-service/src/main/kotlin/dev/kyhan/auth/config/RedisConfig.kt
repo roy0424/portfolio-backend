@@ -1,8 +1,6 @@
 package dev.kyhan.auth.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import dev.kyhan.auth.domain.EmailVerificationCode
 import dev.kyhan.auth.domain.EmailVerificationRateLimit
 import org.springframework.context.annotation.Bean
@@ -17,11 +15,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
 class RedisConfig(
     private val objectMapper: ObjectMapper,
 ) {
-    init {
-        objectMapper.registerModule(JavaTimeModule())
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-    }
-
     @Bean
     fun emailVerificationCodeRedisTemplate(
         connectionFactory: ReactiveRedisConnectionFactory,
