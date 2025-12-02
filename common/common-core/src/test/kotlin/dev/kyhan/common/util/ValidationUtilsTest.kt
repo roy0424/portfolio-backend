@@ -231,4 +231,30 @@ class ValidationUtilsTest {
             assertFalse(ValidationUtils.isValidPassword(""))
         }
     }
+
+    @Nested
+    @DisplayName("isValidUrl 테스트")
+    inner class IsValidUrlTest {
+        @Test
+        @DisplayName("성공: 유효한 URL")
+        fun isValidUrl_Valid() {
+            assertTrue(ValidationUtils.isValidUrl("http://example.com"))
+            assertTrue(ValidationUtils.isValidUrl("https://example.com"))
+            assertTrue(ValidationUtils.isValidUrl("https://www.example.com/path?query=param#fragment"))
+            assertTrue(ValidationUtils.isValidUrl("http://sub.domain.example.com"))
+            assertTrue(ValidationUtils.isValidUrl("https://example.com:8080"))
+        }
+
+        @Test
+        @DisplayName("실패: 잘못된 URL")
+        fun isValidUrl_Invalid() {
+            assertFalse(ValidationUtils.isValidUrl("ftp://example.com"))
+            assertFalse(ValidationUtils.isValidUrl("www.example.com"))
+            assertFalse(ValidationUtils.isValidUrl("example.com"))
+            assertFalse(ValidationUtils.isValidUrl("http//example.com"))
+            assertFalse(ValidationUtils.isValidUrl("://example.com"))
+            assertFalse(ValidationUtils.isValidUrl(""))
+            assertFalse(ValidationUtils.isValidUrl(null))
+        }
+    }
 }

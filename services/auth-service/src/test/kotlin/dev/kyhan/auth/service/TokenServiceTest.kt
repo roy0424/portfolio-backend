@@ -66,7 +66,6 @@ class TokenServiceTest {
                     displayName = "Test User",
                     avatarUrl = "https://example.com/avatar.jpg",
                     bio = "Test bio",
-                    location = "Seoul",
                     website = "https://example.com",
                 )
 
@@ -74,7 +73,7 @@ class TokenServiceTest {
             every { jwtProvider.getEmailFromToken(testRefreshToken) } returns testEmail
             every { jwtProvider.getTokenType(testRefreshToken) } returns JwtProvider.TokenType.REFRESH
             every { userAccountRepository.findById(testUserId) } returns Mono.just(userAccount)
-            every { userProfileRepository.findByUserId(testUserId) } returns Mono.just(userProfile)
+            every { userProfileRepository.findActiveByUserId(testUserId) } returns Mono.just(userProfile)
             every { jwtProvider.generateAccessToken(testUserId, testEmail) } returns "new.access.token"
             every { jwtProvider.generateRefreshToken(testUserId, testEmail) } returns "new.refresh.token"
 
@@ -90,7 +89,7 @@ class TokenServiceTest {
                 }.verifyComplete()
 
             verify(exactly = 1) { userAccountRepository.findById(testUserId) }
-            verify(exactly = 1) { userProfileRepository.findByUserId(testUserId) }
+            verify(exactly = 1) { userProfileRepository.findActiveByUserId(testUserId) }
         }
 
         @Test
@@ -109,7 +108,7 @@ class TokenServiceTest {
             every { jwtProvider.getEmailFromToken(testRefreshToken) } returns testEmail
             every { jwtProvider.getTokenType(testRefreshToken) } returns JwtProvider.TokenType.REFRESH
             every { userAccountRepository.findById(testUserId) } returns Mono.just(userAccount)
-            every { userProfileRepository.findByUserId(testUserId) } returns Mono.empty()
+            every { userProfileRepository.findActiveByUserId(testUserId) } returns Mono.empty()
             every { jwtProvider.generateAccessToken(testUserId, testEmail) } returns "new.access.token"
             every { jwtProvider.generateRefreshToken(testUserId, testEmail) } returns "new.refresh.token"
 
@@ -125,7 +124,7 @@ class TokenServiceTest {
                 }.verifyComplete()
 
             verify(exactly = 1) { userAccountRepository.findById(testUserId) }
-            verify(exactly = 1) { userProfileRepository.findByUserId(testUserId) }
+            verify(exactly = 1) { userProfileRepository.findActiveByUserId(testUserId) }
         }
 
         @Test
