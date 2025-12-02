@@ -13,8 +13,8 @@ data class UserProfile(
     val displayName: String? = null,
     val avatarUrl: String? = null,
     val bio: String? = null,
-    val location: String? = null,
     val website: String? = null,
     val createdAt: Instant = Instant.now(),
     var updatedAt: Instant = Instant.now(),
+    var deletedAt: Instant? = null,
 )

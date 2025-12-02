@@ -33,6 +33,19 @@ class RouteConfig(
                     .filters { f -> f.filter(jwtAuthenticationFilter) }
                     .uri("http://localhost:8081")
             }
+            // User Profile - Public GET by userId
+            .route("user-profile-public") { r ->
+                r
+                    .path("/user-profile/{userId}")
+                    .uri("http://localhost:8081")
+            }
+            // User Profile - Protected (current user operations)
+            .route("user-profile-protected") { r ->
+                r
+                    .path("/user-profile", "/user-profile/**")
+                    .filters { f -> f.filter(jwtAuthenticationFilter) }
+                    .uri("http://localhost:8081")
+            }
             // Portfolio Service - JWT 필요
             .route("portfolio-service") { r ->
                 r

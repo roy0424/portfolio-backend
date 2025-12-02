@@ -31,21 +31,14 @@ class TokenService(
                 .switchIfEmpty(Mono.error(UnauthorizedException(ErrorCode.INVALID_TOKEN)))
                 .flatMap { userAccount ->
                     userProfileRepository
-                        .findByUserId(userAccount.id!!)
+                        .findActiveByUserId(userAccount.id!!)
                         .map { profile ->
                             AuthResponse(
                                 userId = userAccount.id.toString(),
                                 email = userAccount.email,
                                 accessToken = jwtProvider.generateAccessToken(userAccount.id, userAccount.email),
                                 refreshToken = jwtProvider.generateRefreshToken(userAccount.id, userAccount.email),
-                                profile =
-                                    UserProfileDto(
-                                        displayName = profile.displayName,
-                                        avatarUrl = profile.avatarUrl,
-                                        bio = profile.bio,
-                                        location = profile.location,
-                                        website = profile.website,
-                                    ),
+                                profile = UserProfileDto.from(profile),
                             )
                         }.switchIfEmpty(
                             Mono.just(

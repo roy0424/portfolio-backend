@@ -12,6 +12,7 @@ enum class ErrorCode(
     FORBIDDEN("1003", "Forbidden", 403),
     NOT_FOUND("1004", "Resource not found", 404),
     CONFLICT("1005", "Resource conflict", 409),
+    INVALID_URL_FORMAT("1006", "Invalid URL format", 400),
 
     // Auth (2xxx)
     INVALID_CREDENTIALS("2000", "Invalid email or password", 401),
@@ -27,6 +28,8 @@ enum class ErrorCode(
     EMAIL_SEND_FAILED("2010", "Failed to send verification email", 500),
     TOO_MANY_REQUESTS("2011", "Too many verification requests. Please try again later", 429),
     VERIFICATION_COOLDOWN("2012", "Please wait before requesting a new verification code", 429),
+    USER_PROFILE_NOT_FOUND("2013", "User profile not found", 404),
+    USER_PROFILE_DELETED("2014", "User profile has been deleted", 410),
 
     // Site (3xxx)
     SITE_NOT_FOUND("3000", "Site not found", 404),
