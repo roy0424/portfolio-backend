@@ -53,5 +53,27 @@ class RouteConfig(
                     .path("/assets/**")
                     .filters { f -> f.filter(jwtAuthenticationFilter) }
                     .uri("http://localhost:8084")
+            }
+            // OpenAPI docs from services
+            .route("auth-service-docs") { r ->
+                r
+                    .path("/auth-service/v3/api-docs/**")
+                    .filters { f -> f.rewritePath("/auth-service/v3/api-docs(?<segment>.*)", "/v3/api-docs\${segment}") }
+                    .uri("http://localhost:8081")
+            }.route("portfolio-service-docs") { r ->
+                r
+                    .path("/portfolio-service/v3/api-docs/**")
+                    .filters { f -> f.rewritePath("/portfolio-service/v3/api-docs(?<segment>.*)", "/v3/api-docs\${segment}") }
+                    .uri("http://localhost:8082")
+            }.route("page-service-docs") { r ->
+                r
+                    .path("/page-service/v3/api-docs/**")
+                    .filters { f -> f.rewritePath("/page-service/v3/api-docs(?<segment>.*)", "/v3/api-docs\${segment}") }
+                    .uri("http://localhost:8083")
+            }.route("asset-service-docs") { r ->
+                r
+                    .path("/asset-service/v3/api-docs/**")
+                    .filters { f -> f.rewritePath("/asset-service/v3/api-docs(?<segment>.*)", "/v3/api-docs\${segment}") }
+                    .uri("http://localhost:8084")
             }.build()
 }

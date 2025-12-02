@@ -22,6 +22,8 @@ class SecurityConfig(
                     .permitAll()
                     .pathMatchers("/actuator/**")
                     .permitAll()
+                    .pathMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**")
+                    .permitAll()
                     .anyExchange()
                     .authenticated()
             }.oauth2Login { oauth2 ->
