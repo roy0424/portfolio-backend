@@ -7,15 +7,14 @@ dependencies {
     implementation(project(":common:common-event"))
 
     // Spring Boot (no webflux needed, just consumer)
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation(libs.spring.boot.starter)
+    implementation(libs.spring.boot.starter.actuator)
 
     // MongoDB Reactive for analytics storage
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+    implementation(libs.spring.boot.starter.data.mongodb.reactive)
 
     // Kafka Consumer
-    implementation("org.springframework.kafka:spring-kafka")
+    implementation(libs.spring.kafka)
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.kafka:spring-kafka-test")
+    testImplementation(libs.spring.kafka.test)
 }

@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "2.1.0" apply false
-    kotlin("plugin.spring") version "2.1.0" apply false
-    id("org.springframework.boot") version "3.4.1" apply false
-    id("io.spring.dependency-management") version "1.1.7" apply false
-    id("org.jlleitschuh.gradle.ktlint") version "14.0.1" apply false
-    id("org.jetbrains.kotlinx.kover") version "0.9.3"
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.spring) apply false
+    alias(libs.plugins.spring.boot) apply false
+    alias(libs.plugins.spring.dependency.management) apply false
+    alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.kover)
 }
 
 allprojects {
@@ -25,11 +25,15 @@ dependencies {
 }
 
 subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    apply(plugin = "org.jetbrains.kotlinx.kover")
+    if (name in listOf("common", "services", "infrastructure")) {
+        return@subprojects
+    }
+
+    pluginManager.apply(rootProject.libs.plugins.kotlin.jvm.get().pluginId)
+    pluginManager.apply(rootProject.libs.plugins.kotlin.spring.get().pluginId)
+    pluginManager.apply(rootProject.libs.plugins.spring.dependency.management.get().pluginId)
+    pluginManager.apply(rootProject.libs.plugins.ktlint.get().pluginId)
+    pluginManager.apply(rootProject.libs.plugins.kover.get().pluginId)
 
     configure<JavaPluginExtension> {
         toolchain {
@@ -45,17 +49,17 @@ subprojects {
     }
 
     dependencies {
-        "implementation"("org.jetbrains.kotlin:kotlin-reflect")
-        "implementation"("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        "implementation"("io.github.oshai:kotlin-logging-jvm:7.0.3")
+        "implementation"(rootProject.libs.kotlin.reflect)
+        "implementation"(rootProject.libs.kotlin.stdlib.jdk8)
+        "implementation"(rootProject.libs.kotlin.logging.jvm)
 
-        "testImplementation"("org.springframework.boot:spring-boot-starter-test")
-        "testImplementation"("org.jetbrains.kotlin:kotlin-test-junit5")
-        "testImplementation"("io.mockk:mockk:1.13.8")
-        "testImplementation"("com.ninja-squad:springmockk:4.0.2")
-        "testImplementation"("io.projectreactor:reactor-test")
-        "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
+        "testImplementation"(rootProject.libs.spring.boot.starter.test)
+        "testImplementation"(rootProject.libs.kotlin.test.junit5)
+        "testImplementation"(rootProject.libs.mockk)
+        "testImplementation"(rootProject.libs.springmockk)
+        "testImplementation"(rootProject.libs.reactor.test)
     }
+
 
     tasks.withType<Test> {
         useJUnitPlatform()

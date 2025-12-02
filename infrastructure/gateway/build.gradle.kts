@@ -5,13 +5,11 @@ plugins {
 dependencies {
     implementation(project(":common:common-security"))
 
-    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-}
+    implementation(platform(libs.spring.cloud.bom))
+    implementation(libs.spring.cloud.starter.gateway)
+    implementation(libs.spring.boot.starter.webflux)
+    implementation(libs.spring.boot.starter.actuator)
 
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.0")
-    }
+    // OpenAPI/Swagger for API aggregation
+    implementation(libs.springdoc.openapi.webflux.ui)
 }

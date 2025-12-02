@@ -8,30 +8,30 @@ dependencies {
     implementation(project(":common:common-event"))
 
     // Spring WebFlux
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation(libs.spring.boot.starter.webflux)
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.validation)
 
     // R2DBC for reactive PostgreSQL
-    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
-    implementation("org.postgresql:r2dbc-postgresql")
+    implementation(libs.bundles.r2dbc.postgres)
 
     // Flyway for DB migration
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.flywaydb:flyway-database-postgresql")
-    runtimeOnly("org.postgresql:postgresql")
+    implementation(libs.bundles.flyway.postgres)
 
     // Security & OAuth2
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.oauth2.client)
 
     // Kafka
-    implementation("org.springframework.kafka:spring-kafka")
+    implementation(libs.spring.kafka)
 
     // Redis
-    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
-    implementation("io.lettuce:lettuce-core")
+    implementation(libs.spring.boot.starter.data.redis.reactive)
+    implementation(libs.lettuce.core)
 
     // Email sending
-    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation(libs.spring.boot.starter.mail)
+
+    // OpenAPI/Swagger
+    implementation(libs.springdoc.openapi.webflux.ui)
 }
