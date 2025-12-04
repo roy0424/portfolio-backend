@@ -11,7 +11,7 @@ data class UserProfile(
     val id: UUID? = null,
     val userId: UUID,
     val displayName: String? = null,
-    val avatarUrl: String? = null,
+    val avatarAssetId: UUID? = null, // Only store assetId, not URL
     val bio: String? = null,
     val website: String? = null,
     val createdAt: Instant = Instant.now(),
