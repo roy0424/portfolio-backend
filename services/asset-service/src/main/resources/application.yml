@@ -1,9 +1,65 @@
 server:
   port: 8084
 
+# gRPC Server Configuration
+grpc:
+  server:
+    port: 9090
+
 spring:
   application:
     name: asset-service
+  config:
+    import: optional:file:local.env
+
+  # PostgreSQL R2DBC (asset schema)
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:portfolio_db}?currentSchema=asset
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+
+  # Flyway (schema migration)
+  flyway:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:portfolio_db}
+    user: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    schemas: asset
+    default-schema: asset
+    enabled: true
+
+  # Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: asset-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+  # WebFlux (multipart file upload configuration)
+  codec:
+    max-in-memory-size: 10MB  # In-memory buffer for small files
+
+# Cloudflare R2 Configuration (S3-compatible)
+cloudflare:
+  r2:
+    endpoint: ${R2_ENDPOINT:https://your-account-id.r2.cloudflarestorage.com}
+    access-key: ${R2_ACCESS_KEY:your-r2-access-key}
+    secret-key: ${R2_SECRET_KEY:your-r2-secret-key}
+    bucket-name: ${R2_BUCKET_NAME:portfolio-assets}
+    region: auto  # R2 uses "auto" region
+    cdn-url: ${R2_CDN_URL:https://assets.yourdomain.com}  # Custom domain or R2 public URL
+    signing-key: ${R2_SIGNING_KEY:your-signing-key}  # For signed URLs
+
+# Asset constraints
+asset:
+  max-file-size: 1073741824  # 1GB in bytes
+  allowed-content-types:  # Empty means allow all types
+  upload-path-prefix: ""  # No prefix needed with simplified path structure
 
 management:
   endpoints:
