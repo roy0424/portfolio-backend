@@ -112,7 +112,8 @@ class OAuth2LoginSuccessHandler(
                     UserProfile(
                         userId = savedUser.id!!,
                         displayName = name,
-                        avatarUrl = picture,
+                        // OAuth2 profile picture URL is not stored directly
+                        // Users should upload avatar through asset-service instead
                     )
 
                 userProfileRepository
