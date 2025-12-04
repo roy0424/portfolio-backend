@@ -64,7 +64,6 @@ class TokenServiceTest {
                     id = UUID.randomUUID(),
                     userId = testUserId,
                     displayName = "Test User",
-                    avatarUrl = "https://example.com/avatar.jpg",
                     bio = "Test bio",
                     website = "https://example.com",
                 )
