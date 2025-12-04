@@ -9,12 +9,8 @@ data class UpdateUserProfileRequest(
     @field:Size(max = 20, message = "Display name must be at most 20 characters")
     @Schema(description = "Display name", example = "kyhan", maxLength = 20)
     val displayName: String? = null,
-    @field:Pattern(
-        regexp = "^(https?://.*)?$",
-        message = "Avatar URL must start with http:// or https://",
-    )
-    @Schema(description = "Avatar image URL", example = "https://cdn.example.com/avatar.png")
-    val avatarUrl: String? = null,
+    @Schema(description = "Avatar asset ID (from asset-service)", example = "123e4567-e89b-12d3-a456-426614174000")
+    val avatarAssetId: String? = null,
     @field:Size(max = 500, message = "Bio must be at most 500 characters")
     @Schema(description = "Short bio", example = "Building portfolio platform.", maxLength = 500)
     val bio: String? = null,

@@ -12,6 +12,8 @@ data class UserProfileDto(
     val userId: String,
     @Schema(description = "Display name", example = "kyhan", nullable = true, maxLength = 20)
     val displayName: String?,
+    @Schema(description = "Avatar asset ID", example = "123e4567-e89b-12d3-a456-426614174000", nullable = true)
+    val avatarAssetId: String?,
     @Schema(description = "Avatar image URL", example = "https://cdn.example.com/avatar.png", nullable = true)
     val avatarUrl: String?,
     @Schema(description = "Short bio", example = "Building portfolio platform.", nullable = true)
@@ -24,12 +26,16 @@ data class UserProfileDto(
     val updatedAt: Instant,
 ) {
     companion object {
-        fun from(profile: UserProfile): UserProfileDto =
+        fun from(
+            profile: UserProfile,
+            avatarUrl: String? = null,
+        ): UserProfileDto =
             UserProfileDto(
                 id = profile.id!!.toString(),
                 userId = profile.userId.toString(),
                 displayName = profile.displayName,
-                avatarUrl = profile.avatarUrl,
+                avatarAssetId = profile.avatarAssetId?.toString(),
+                avatarUrl = avatarUrl,
                 bio = profile.bio,
                 website = profile.website,
                 createdAt = profile.createdAt,
