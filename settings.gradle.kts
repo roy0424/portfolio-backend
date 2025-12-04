@@ -4,6 +4,7 @@ rootProject.name = "portfolio-ms"
 include("common:common-core")
 include("common:common-security")
 include("common:common-event")
+include("common:common-grpc")
 
 // Infrastructure
 include("infrastructure:gateway")

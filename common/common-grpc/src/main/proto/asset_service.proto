@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "dev.kyhan.asset.grpc";
+option java_outer_classname = "AssetServiceProto";
+
+package asset;
+
+// Asset Service gRPC API
+service AssetService {
+  // Get asset by ID with ownership verification
+  rpc GetAsset(GetAssetRequest) returns (GetAssetResponse);
+
+  // Verify asset ownership (for simple validation)
+  rpc VerifyAssetOwnership(VerifyAssetOwnershipRequest) returns (VerifyAssetOwnershipResponse);
+}
+
+// Get Asset Request
+message GetAssetRequest {
+  string asset_id = 1;  // UUID as string
+  string user_id = 2;   // UUID as string (for ownership verification)
+}
+
+// Get Asset Response
+message GetAssetResponse {
+  string asset_id = 1;
+  string user_id = 2;
+  string site_id = 3;  // optional, empty if null
+  string file_name = 4;
+  string original_file_name = 5;
+  string content_type = 6;
+  int64 file_size = 7;
+  string cdn_url = 8;
+  string visibility = 9;  // PUBLIC or PRIVATE
+  string status = 10;     // ACTIVE, PROCESSING, FAILED, DELETED
+  int64 uploaded_at = 11; // Unix timestamp in milliseconds
+}
+
+// Verify Asset Ownership Request
+message VerifyAssetOwnershipRequest {
+  string asset_id = 1;
+  string user_id = 2;
+}
+
+// Verify Asset Ownership Response
+message VerifyAssetOwnershipResponse {
+  bool exists = 1;
+  bool is_owner = 2;
+  string cdn_url = 3;  // Returns CDN URL if exists and is_owner
+}
