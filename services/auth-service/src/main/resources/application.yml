@@ -94,6 +94,13 @@ mail:
   from-address: ${MAIL_FROM_ADDRESS:noreply@portfolio-platform.com}
   from-name: ${MAIL_FROM_NAME:Portfolio Platform}
 
+# gRPC Client Configuration
+grpc:
+  client:
+    asset-service:
+      address: static://localhost:9090
+      negotiation-type: plaintext
+
 management:
   endpoints:
     web:
