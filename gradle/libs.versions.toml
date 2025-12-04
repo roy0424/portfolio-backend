@@ -11,6 +11,12 @@ mockk = "1.13.8"
 springmockk = "4.0.2"
 aws-sdk = "2.29.41"
 springdoc-openapi = "2.8.4"
+grpc = "1.63.0"
+grpc-kotlin = "1.4.1"
+grpc-spring-boot-starter = "3.1.0.RELEASE"
+protobuf = "4.28.2"
+protobuf-plugin = "0.9.4"
+kotlinx-coroutines = "1.9.0"
 
 [libraries]
 # BOMs (Bill of Materials)
@@ -68,6 +74,20 @@ aws-sdk-s3 = { module = "software.amazon.awssdk:s3" }
 # OpenAPI/Swagger
 springdoc-openapi-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc-openapi" }
 
+# gRPC
+grpc-netty = { module = "io.grpc:grpc-netty", version.ref = "grpc" }
+grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpc" }
+grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
+grpc-kotlin-stub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpc-kotlin" }
+protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin", version.ref = "protobuf" }
+grpc-server-spring-boot-starter = { module = "net.devh:grpc-server-spring-boot-starter", version.ref = "grpc-spring-boot-starter" }
+grpc-client-spring-boot-starter = { module = "net.devh:grpc-client-spring-boot-starter", version.ref = "grpc-spring-boot-starter" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
+grpc-protoc-gen-java = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpc" }
+grpc-protoc-gen-kotlin = { module = "io.grpc:protoc-gen-grpc-kotlin", version.ref = "grpc-kotlin" }
+
 # Kotlin
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
@@ -109,3 +129,4 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
